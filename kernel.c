@@ -66,21 +66,73 @@ void terminal_setcolor(uint8_t color)
 	terminal_color = color;
 }
 
-void terminal_putentryat(char c, uint8_t color, size_t x, size_t y)
+void terminal_putentryat(uint16_t vga_entry, size_t col, size_t row)
 {
-	const size_t index = y * VGA_WIDTH + x;
-	terminal_buffer[index] = make_vgaentry(c, color);
+	const size_t index = row * VGA_WIDTH + col;
+	terminal_buffer[index] = vga_entry;
+}
+
+uint16_t terminal_getentryat(size_t col, size_t row)
+{
+	const size_t index = row * VGA_WIDTH + col;
+	return terminal_buffer[index];
+}
+
+void terminal_clear_row_from(size_t col, size_t row)
+{
+    size_t i;
+    uint16_t vga_entry = make_vgaentry(' ', terminal_color);
+    for(i = col; i < VGA_WIDTH; i++)
+        terminal_putentryat(vga_entry, i, row);
+}
+
+void terminal_scroll(void)
+{
+
+    /* need to move all rows up by one index
+       losing information about row 0 */
+   size_t temp_row, temp_column;
+    /* for each row */
+     for(temp_row = 1; temp_row < VGA_HEIGHT; temp_row++) {
+
+        for(temp_column = 0; temp_column < VGA_WIDTH; temp_column++){
+            uint16_t ventry = terminal_getentryat(temp_column, temp_row);
+            terminal_putentryat(ventry, temp_column, temp_row - 1);
+        }
+    }
+
+    /* clear the last row, making 'space' */
+    terminal_clear_row_from(0, VGA_HEIGHT - 1);
+
 }
 
 void terminal_putchar(char c)
 {
-	terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
+
+    /* handle newline char */
+    if (c == '\n') {
+
+        terminal_clear_row_from(terminal_column, terminal_row);
+		terminal_column = 0;
+        
+        if( ++terminal_row == VGA_HEIGHT) {
+			terminal_scroll();
+			terminal_row--;
+        }
+        return;
+    }
+
+	uint16_t vga_entry = make_vgaentry(c, terminal_color);
+	terminal_putentryat(vga_entry, terminal_column, terminal_row);
+
+	/* handle moving to next line */
 	if ( ++terminal_column == VGA_WIDTH )
 	{
 		terminal_column = 0;
 		if ( ++terminal_row == VGA_HEIGHT )
 		{
-			terminal_row = 0;
+			terminal_scroll();
+			terminal_row--;
 		}
 	}
 }
@@ -92,8 +144,18 @@ void terminal_writestring(const char* data)
 		terminal_putchar(data[i]);
 }
 
+void terminal_test() {
+
+    size_t i;
+    terminal_writestring("NEWSTRING\n");
+    for(i = 0; i < VGA_HEIGHT; i++) {
+        terminal_writestring("Hello Mehta\n");
+    }
+    terminal_writestring("NEWSTRING\n");
+}
+
 void kmain()
 {
 	terminal_initialize();
-	terminal_writestring("Hello, Mehta!\n");
+	terminal_test();
 }
