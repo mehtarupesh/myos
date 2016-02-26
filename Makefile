@@ -8,6 +8,8 @@ LIBS:=-lgcc
 OBJS:=\
 boot.o \
 kernel.o \
+terminal.o \
+string.o \
 
 all: myos.bin
 
