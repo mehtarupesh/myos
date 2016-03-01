@@ -138,12 +138,13 @@ void terminal_writestring(const char* data)
 		terminal_putchar(data[i]);
 }
 
+static char* test_string="NEWSTRING\n";
 void terminal_test() {
 
     size_t i;
-    terminal_writestring("NEWSTRING\n");
+    terminal_writestring(test_string);
     for(i = 0; i < VGA_HEIGHT; i++) {
         terminal_writestring("Hello Mehta\n");
     }
-    terminal_writestring("NEWSTRING\n");
+    terminal_writestring(test_string);
 }

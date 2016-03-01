@@ -1,7 +1,7 @@
 AS:=i586-elf-as
 CC:=i586-elf-gcc
 
-CFLAGS:=-ffreestanding -O2 -Wall -Wextra -nostdlib -nostartfiles -nodefaultlibs
+CFLAGS:=-ffreestanding -Wall -Wextra -nostdlib -nostartfiles -nodefaultlibs -g
 CPPFLAGS:=
 LIBS:=-lgcc
 
@@ -22,7 +22,7 @@ myos.bin: $(OBJS) linker.ld
 	$(CC) -c $< -o $@ -std=gnu99 $(CFLAGS) $(CPPFLAGS)
 
 %.o: %.s
-	$(AS) $< -o $@
+	$(AS) $< -o $@ -g
 
 clean:
 	rm -rf isodir
