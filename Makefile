@@ -1,7 +1,7 @@
 AS:=i586-elf-as
 CC:=i586-elf-gcc
 
-CFLAGS:=-ffreestanding -Wall -Wextra -nostdlib -nostartfiles -nodefaultlibs -g
+CFLAGS:=-ffreestanding -Wall -Wextra -nostdlib -nostartfiles -nodefaultlibs -g -Iinclude/
 CPPFLAGS:=
 LIBS:=-lgcc
 

@@ -1,6 +1,6 @@
-#include "printf.h"
-#include "putc.h"
-#include "string.h"
+#include <printf.h>
+#include <putc.h>
+#include <string.h>
 
 void printf(char *fmt, ...) {
 

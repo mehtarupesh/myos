@@ -1,8 +1,8 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include "terminal.h"
-#include "string.h"
+#include <terminal.h>
+#include <string.h>
 
 static const uint8_t COLOR_BLACK = 0;
 static const uint8_t COLOR_BLUE = 1;
