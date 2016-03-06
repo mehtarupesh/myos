@@ -10,6 +10,10 @@ boot.o \
 kernel.o \
 terminal.o \
 string.o \
+putc.o \
+printf.o \
+
+OBJS_DIR:=build_files
 
 all: myos.bin
 
@@ -17,6 +21,8 @@ all: myos.bin
 
 myos.bin: $(OBJS) linker.ld
 	$(CC) -T linker.ld -o $@ $(CFLAGS) $(OBJS) $(LIBS)
+	mkdir $(OBJS_DIR)
+	mv $(OBJS) $(OBJS_DIR)
 
 %.o: %.c
 	$(CC) -c $< -o $@ -std=gnu99 $(CFLAGS) $(CPPFLAGS)
@@ -26,7 +32,8 @@ myos.bin: $(OBJS) linker.ld
 
 clean:
 	rm -rf isodir
-	rm -f myos.bin myos.iso $(OBJS)
+	rm -rf $(OBJS_DIR)
+	rm -f myos.bin myos.iso myos.sym $(OBJS)
 
 iso: myos.iso
 

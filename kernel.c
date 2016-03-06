@@ -7,5 +7,6 @@
 void kmain()
 {
 	terminal_initialize();
-	terminal_test();
+	//terminal_test();
+	printf("hello");
 }
